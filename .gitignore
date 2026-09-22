@@ -1,0 +1,32 @@
+# Environment variables - chứa thông tin (tài khoản, mật khẩu), KHÔNG push lên repo
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/blob-report/
+/playwright/.auth/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Editor / OS
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
