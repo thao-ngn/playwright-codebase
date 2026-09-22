@@ -44,16 +44,6 @@ npm install
 npx playwright install
 ```
 
-## Cấu hình biến môi trường
-
-Tạo file `.env` ở thư mục gốc (file này đã được ignore, không push lên repo):
-
-```env
-BASE_URL=https://pw-practice-dev.playwrightvn.com
-ADMIN_USER=your_admin_username
-ADMIN_PASS=your_admin_password
-```
-
 ## Chạy test
 
 ```bash
@@ -76,4 +66,4 @@ Pipeline chạy tự động qua GitHub Actions, cấu hình tại [`.github/wor
 
 ## Coding convention
 
-Xem chi tiết tại [06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) - quy tắc đặt tên, async/await, assertion, locator strategy...
+[06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) - quy tắc đặt tên, async/await, assertion, locator strategy...
