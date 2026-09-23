@@ -15,7 +15,7 @@
   - Các widget load bất đồng bộ (AJAX) → không nên assert ngay khi trang vừa load xong, cần đợi widget cụ thể xuất hiện
   - Vị trí widget có thể bị người dùng kéo-thả tuỳ chỉnh → không nên dựa vào vị trí DOM cố định
 
-## 3. Posts (Bài viết)
+## 3. Posts
 - Action: tạo mới, sửa, xoá (chuyển vào Trash), khôi phục, xoá vĩnh viễn, tìm kiếm, lọc theo category/tag, bulk action (xoá nhiều, đổi trạng thái nhiều)
 - Lưu ý:
   - Trình soạn thảo Gutenberg (block editor) load chậm hơn các trang list — cần timeout riêng
