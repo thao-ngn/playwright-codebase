@@ -1,5 +1,6 @@
 import { test as base, Page } from '@playwright/test';
 import { LoginPage } from '@pages/login.page';
+import { requiredEnv } from '@environment/config';
 
 type AuthFixtures = {
   authenticatedPage: Page;
@@ -10,7 +11,7 @@ export const test = base.extend<AuthFixtures>({
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await loginPage.login(process.env.ADMIN_USER!, process.env.ADMIN_PASS!);
+    await loginPage.login(requiredEnv('ADMIN_USER'), requiredEnv('ADMIN_PASS'));
     await use(page);
     // Không cần cleanup, session hết hạn khi context đóng
   },

@@ -20,7 +20,9 @@
       "@pages/*": ["pages/*"],
       "@fixtures/*": ["fixtures/*"],
       "@utils/*": ["utils/*"],
-      "@test-data/*": ["test-data/*"]
+      "@test-data/*": ["test-data/*"],
+      "@api/*": ["api/*"],
+      "@environment/*": ["environment/*"]
     }
   },
   "exclude": ["node_modules", "playwright-report", "test-results"]

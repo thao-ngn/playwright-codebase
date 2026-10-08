@@ -21,15 +21,27 @@ Toàn bộ quá trình phân tích và thiết kế trước khi code được g
 playwright-codebase/
 ├── project-documentations/   # Tài liệu thiết kế (xem bảng trên)
 ├── tests/                    # Test spec (e2e, api)
+├── api/                      # REST API helpers dùng để seed/cleanup dữ liệu
 ├── pages/                    # Page Object Model classes
 ├── fixtures/                 # Custom Playwright fixtures
 ├── utils/                    # Helper functions
 ├── test-data/                # Dữ liệu test tĩnh
+├── environment/              # Cấu hình môi trường và mẫu biến môi trường
 ├── .github/workflows/        # CI pipeline (GitHub Actions)
 ├── .env                      # Biến môi trường (KHÔNG commit)
 ├── playwright.config.ts
 └── package.json
 ```
+
+## Cấu hình môi trường
+
+Tạo file `.env` ở thư mục gốc từ mẫu `environment/.env.example`, sau đó điền URL và tài khoản test. Không commit `.env` hoặc thông tin đăng nhập:
+
+```powershell
+Copy-Item environment\.env.example .env
+```
+
+Các API test mẫu nằm trong `tests/api/`; có thể chạy riêng bằng `npx playwright test tests/api`.
 
 ## Yêu cầu môi trường
 - Node.js >= 18

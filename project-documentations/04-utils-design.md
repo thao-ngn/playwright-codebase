@@ -37,7 +37,7 @@ export async function loginViaApi(request: APIRequestContext, username: string, 
 }
 ```
 - Mục đích chính: **seed dữ liệu nhanh qua API** thay vì tạo qua UI (giúp test UI chỉ tập trung vào hành vi cần test, giảm thời gian chạy)
-- Luôn cleanup (xoá) dữ liệu đã tạo trong `afterEach`/`afterAll` để tránh rác tồn đọng trên môi trường test dùng chung22
+- Luôn cleanup (xoá) dữ liệu đã tạo trong `afterEach`/`afterAll` để tránh rác tồn đọng trên môi trường test dùng chung
 
 ## 3. `wait-helper.ts` — các hàm chờ dùng chung
 ```ts

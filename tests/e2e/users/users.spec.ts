@@ -1,6 +1,7 @@
 import { test, expect } from '@fixtures/index';
 import { UsersPage } from '@pages/users.page';
 import { randomEmail, randomUsername, randomPassword } from '@utils/data-generator';
+import { requiredEnv } from '@environment/config';
 
 test.describe('Users', () => {
   test('tạo mới user và đổi role', async ({ authenticatedPage }) => {
@@ -23,7 +24,7 @@ test.describe('Users', () => {
     const usersPage = new UsersPage(authenticatedPage);
 
     await usersPage.goto();
-    await usersPage.deleteUser(testUser.username, process.env.ADMIN_USER);
+    await usersPage.deleteUser(testUser.username, requiredEnv('ADMIN_USER'));
     await expect(authenticatedPage.getByText(testUser.username)).not.toBeVisible();
   });
 });
