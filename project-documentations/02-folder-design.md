@@ -1,42 +1,57 @@
 playwright-codebase/
-├── project-documentations/     # Các file thiết kế (01-06)
+├── .github/
+│   ├── skills/
+│   │   └── create-testscript/
+│   │       └── SKILL.md
+│   └── workflows/
+│       └── playwright.yml
+├── api/
+│   └── wordpress-api.ts        # REST API helpers seed/cleanup user và post
+├── environment/
+│   └── config.ts               # base URL và truy cập biến môi trường
+├── project-documentations/     # Tài liệu thiết kế
+│   ├── 01-website-feature.md
+│   ├── 02-folder-design.md
+│   ├── 03-pom-design.md
+│   ├── 04-utils-design.md
+│   ├── 05-fixture-design.md
+│   └── 06-coding-convention-design.md
 ├── tests/
 │   ├── e2e/                    # Test UI, tổ chức theo module
 │   │   ├── auth/
-│   │   │   └── login.spec.ts
+│   │   │   ├── login-form.spec.ts
+│   │   │   ├── login.spec.ts
+│   │   │   └── test.txt
+│   │   ├── media/
+│   │   │   └── media.spec.ts
 │   │   ├── posts/
 │   │   │   └── posts-crud.spec.ts
-│   │   ├── media/
-│   │   ├── users/
-│   │   └── settings/
-│   └── api/                    # Test API (nếu có), vd user-management
-│       └── users.api.spec.ts
-├── api/                        # REST API client/helpers dùng để seed và cleanup
-│   └── wordpress-api.ts
-├── pages/                      # Page Object Model classes
+│   │   ├── settings/
+│   │   │   └── settings.spec.ts
+│   │   └── users/
+│   │       └── users.spec.ts
+│   └── example.spec.ts
+├── pages/                      # Page Object Model
 │   ├── base.page.ts
-│   ├── login.page.ts
 │   ├── dashboard.page.ts
+│   ├── login.page.ts
+│   ├── media.page.ts
 │   ├── posts.page.ts
-│   ├── users.page.ts
-│   └── ...
+│   ├── settings.page.ts
+│   └── users.page.ts
 ├── fixtures/
 │   ├── auth.fixture.ts
+│   ├── index.ts
 │   └── user.fixture.ts
 ├── utils/
-│   ├── data-generator.ts       # sinh random email/username...
-│   ├── api-helper.ts           # re-export tương thích các API helper
+│   ├── api-helper.ts           # re-export API helpers tương thích
+│   ├── data-generator.ts
 │   └── wait-helper.ts
-├── test-data/
-│   ├── users.json              # dữ liệu mẫu user, không chứa thông tin đăng nhập
-│   └── posts.json              # dữ liệu mẫu post
-├── environment/
-│   ├── config.ts               # cấu hình URL và truy cập biến môi trường
-│   ├── .env.example            # mẫu biến môi trường; copy ra .env ở root
-│   └── README.md               # hướng dẫn cấu hình môi trường
 ├── .env                        # KHÔNG push lên repo
 ├── .gitignore
 ├── playwright.config.ts
 ├── package.json
 ├── tsconfig.json
 └── README.md
+
+`test-data/` và `tests/api/` chưa tồn tại trong codebase hiện tại nên không được liệt kê. Report, dependencies và kết quả test được tạo tự động, không đưa vào cây source này.
