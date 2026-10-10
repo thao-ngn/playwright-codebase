@@ -21,6 +21,7 @@ Toàn bộ quá trình phân tích và thiết kế trước khi code được g
 playwright-codebase/
 ├── project-documentations/   # Tài liệu thiết kế (xem bảng trên)
 ├── tests/                    # Test spec (e2e, api)
+├── report/                   # HTML report được tạo sau khi chạy test
 ├── api/                      # REST API helpers dùng để seed/cleanup dữ liệu
 ├── pages/                    # Page Object Model classes
 ├── fixtures/                 # Custom Playwright fixtures
@@ -68,8 +69,8 @@ npx playwright test tests/e2e/auth/login.spec.ts
 # Chạy với UI mode (debug trực quan)
 npx playwright test --ui
 
-# Xem report sau khi chạy
-npx playwright show-report
+# Xem HTML report sau khi chạy test
+npx playwright show-report report
 ```
 
 ## CI/CD
