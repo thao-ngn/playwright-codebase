@@ -2,7 +2,7 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { PostsPage } from '@pages/posts.page';
 import { randomPostTitle } from '@utils/data-generator';
 
-test.describe('Posts CRUD', () => {
+test.describe('Posts', () => {
   test('tạo mới, tìm kiếm và xoá một post', async ({ authenticatedPage }) => {
     const postsPage = new PostsPage(authenticatedPage);
     const title = randomPostTitle();
