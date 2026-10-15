@@ -2,6 +2,14 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { DashboardPage } from '@pages/dashboard.page';
 
 test.describe('Dashboard', () => {
+  test('chuyển người dùng chưa đăng nhập về trang login khi mở dashboard', async ({ page }) => {
+    const dashboardPage = new DashboardPage(page);
+
+    await dashboardPage.goto();
+
+    await expect(page).toHaveURL(/wp-login\.php/);
+  });
+
   test('hiển thị các widget chính sau khi đăng nhập', async ({ authenticatedPage }) => {
     const dashboardPage = new DashboardPage(authenticatedPage);
 

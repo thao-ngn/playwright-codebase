@@ -24,4 +24,33 @@ test.describe('Login', () => {
     const errorMessage = await loginPage.getErrorMessage();
     expect(errorMessage.length).toBeGreaterThan(0);
   });
+
+  test('không đăng nhập khi bỏ trống username và mật khẩu', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.goto();
+    await loginPage.login('', '');
+
+    await expect(page).toHaveURL(/wp-login\.php/);
+  });
+
+  test('không đăng nhập khi bỏ trống username', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.goto();
+    await loginPage.login('', 'sample-password');
+
+    await expect(page).toHaveURL(/wp-login\.php/);
+  });
+
+  test('hiển thị lỗi khi username không tồn tại', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.goto();
+    await loginPage.login('nonexistent-login-user', 'sample-password');
+
+    const errorMessage = await loginPage.getErrorMessage();
+    expect(errorMessage.length).toBeGreaterThan(0);
+    await expect(page).toHaveURL(/wp-login\.php/);
+  });
 });
