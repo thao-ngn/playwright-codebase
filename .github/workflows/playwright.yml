@@ -25,3 +25,9 @@ jobs:
         name: playwright-report
         path: report/
         retention-days: 30
+
+    - name: Run Playwright tests with env
+  run: npx playwright test
+  env:
+    ADMIN_USER: ${{ secrets.ADMIN_USER }}
+    ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
