@@ -23,12 +23,30 @@ export class UsersPage extends BasePage {
   private roleCheckbox = (username: string) => this.userRow(username).getByRole('checkbox');
   private changeRoleSelect = () => this.page.getByLabel('Change role to…');
   private changeButton = () => this.page.getByRole('button', { name: 'Change', exact: true });
+  private creationErrorNotice = () => this.page.locator('.notice-error');
+
+  emailInputLocator() {
+    return this.emailInput();
+  }
+
+  creationErrorNoticeLocator() {
+    return this.creationErrorNotice();
+  }
 
   async goto(): Promise<void> {
     await super.goto('/wp-admin/users.php');
   }
 
   async createUser(userData: NewUserData): Promise<void> {
+    await this.submitNewUserForm(userData);
+    await expect(this.page.getByText('New user created.')).toBeVisible();
+  }
+
+  async attemptCreateUser(userData: NewUserData): Promise<void> {
+    await this.submitNewUserForm(userData);
+  }
+
+  private async submitNewUserForm(userData: NewUserData): Promise<void> {
     await this.addNewButton().click();
     await this.usernameInput().fill(userData.username);
     await this.emailInput().fill(userData.email);
@@ -37,7 +55,6 @@ export class UsersPage extends BasePage {
       await this.roleSelect().selectOption(userData.role);
     }
     await this.addUserSubmitButton().click();
-    await expect(this.page.getByText('New user created.')).toBeVisible();
   }
 
   // reassignTo có 2 nhánh: gán lại nội dung cho user khác, hoặc bỏ trống để xoá luôn nội dung

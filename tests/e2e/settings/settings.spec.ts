@@ -26,3 +26,13 @@ test.describe('Settings', () => {
     await expect(authenticatedPage.getByText('Permalink structure updated.')).toBeVisible();
   });
 });
+
+test.describe('Settings access control', () => {
+  test('chuyển người dùng chưa đăng nhập về login khi mở Permalinks', async ({ page }) => {
+    const settingsPage = new SettingsPage(page);
+
+    await settingsPage.gotoPermalinks();
+
+    await expect(page).toHaveURL(/wp-login\.php/);
+  });
+});
