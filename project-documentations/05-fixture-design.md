@@ -1,8 +1,8 @@
 # Fixture Design
 
-> Mục đích: thiết kế các custom fixture giúp test setup/cleanup gọn gàng, tái sử dụng session đăng nhập.
+> Purpose: Design custom fixtures that simplify test setup and cleanup and reuse authenticated sessions.
 
-## 1. `auth.fixture.ts` — page đã đăng nhập sẵn
+## 1. `auth.fixture.ts` — Pre-authenticated Page
 ```ts
 import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
@@ -17,16 +17,16 @@ export const test = base.extend<AuthFixtures>({
     await loginPage.goto();
     await loginPage.login(process.env.ADMIN_USER!, process.env.ADMIN_PASS!);
     await use(page);
-    // không cần cleanup — session hết khi context đóng
+    // No cleanup is needed; the session ends when the context closes.
   },
 });
 
 export { expect } from '@playwright/test';
 ```
-- Scope: **test-level** (mỗi test một session mới) — đơn giản, dễ debug, đánh đổi tốc độ
-- Cải tiến sau này: dùng `storageState` để lưu session đã login 1 lần, tái sử dụng cho nhiều test → giảm thời gian chạy đáng kể
+- Scope: **test-level** (a new session for each test). This is simple and easy to debug, at the cost of speed.
+- Future improvement: Use `storageState` to save a session after logging in once and reuse it across tests, significantly reducing execution time.
 
-## 2. `user.fixture.ts` — seed user qua API trước khi test, cleanup sau
+## 2. `user.fixture.ts` — Seed a User Through the API Before the Test and Clean It Up Afterwards
 ```ts
 type UserFixtures = {
   testUser: { id: number; username: string; email: string; password: string };
@@ -43,21 +43,21 @@ export const test = base.extend<UserFixtures>({
 
     await use({ ...userData, id: created.id });
 
-    // Cleanup: chạy sau khi test dùng xong fixture, kể cả khi test fail
+    // Cleanup runs after the test, whether it passes or fails.
     await deleteUserViaApi(request, created.id);
   },
 });
 ```
-- Scope: **test-level**, vì mỗi test thường cần user riêng để tránh đụng dữ liệu giữa các test chạy song song
-- Fixture tự cleanup nhờ cơ chế `use()` của Playwright (code sau `use()` luôn chạy dù test pass/fail)
+- Scope: **test-level**, because each test usually needs its own user to avoid conflicts during parallel execution.
+- The fixture cleans up automatically through Playwright's `use()` mechanism (code after `use()` runs whether the test passes or fails).
 
-## 3. Kết hợp nhiều fixture
+## 3. Combining Multiple Fixtures
 ```ts
 export const test = mergeTests(authTest, userTest);
 ```
-- Cho phép 1 file test import 1 `test` object duy nhất nhưng có cả `authenticatedPage` và `testUser`
+- This lets a test file import a single `test` object that provides both `authenticatedPage` and `testUser`.
 
-## Nguyên tắc chung
-- Fixture nên **tự cleanup**, không để test phải nhớ xoá dữ liệu thủ công
-- Ưu tiên seed dữ liệu qua **API** (nhanh, ổn định) hơn là qua UI trong fixture
-- Đặt tên fixture rõ nghĩa theo "nó là cái gì" (`testUser`) chứ không phải "nó làm gì" (`createUser`)
+## General Guidelines
+- Fixtures should **clean up after themselves** so tests do not have to remember to delete data manually.
+- Prefer seeding data through the **API** (faster and more reliable) rather than through the UI in a fixture.
+- Name fixtures after what they provide (`testUser`), not what they do (`createUser`).

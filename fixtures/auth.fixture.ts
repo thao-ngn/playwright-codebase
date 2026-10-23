@@ -7,13 +7,13 @@ type AuthFixtures = {
 };
 
 export const test = base.extend<AuthFixtures>({
-  // Scope test-level: mỗi test một session đăng nhập mới, đơn giản và dễ debug
+  // Test-level scope: each test gets a new login session, which is simple and easy to debug.
   authenticatedPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
     await loginPage.login(requiredEnv('ADMIN_USER'), requiredEnv('ADMIN_PASS'));
     await use(page);
-    // Không cần cleanup, session hết hạn khi context đóng
+    // No cleanup is needed; the session expires when the context closes.
   },
 });
 

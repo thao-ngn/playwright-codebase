@@ -2,7 +2,7 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { DashboardPage } from '@pages/dashboard.page';
 
 test.describe('Dashboard', () => {
-  test('chuyển người dùng chưa đăng nhập về trang login khi mở dashboard', async ({ page }) => {
+  test('redirects unauthenticated users to login when opening the dashboard', async ({ page }) => {
     const dashboardPage = new DashboardPage(page);
 
     await dashboardPage.goto();
@@ -10,7 +10,7 @@ test.describe('Dashboard', () => {
     await expect(page).toHaveURL(/wp-login\.php/);
   });
 
-  test('hiển thị các widget chính sau khi đăng nhập', async ({ authenticatedPage }) => {
+  test('shows the main widgets after login', async ({ authenticatedPage }) => {
     const dashboardPage = new DashboardPage(authenticatedPage);
 
     await dashboardPage.goto();
@@ -22,7 +22,7 @@ test.describe('Dashboard', () => {
     await expect(authenticatedPage.getByText('WordPress Events and News')).toBeVisible();
   });
 
-  test('hiển thị các trường nhập và nút lưu trong Quick Draft', async ({ authenticatedPage }) => {
+  test('shows the input fields and save button in Quick Draft', async ({ authenticatedPage }) => {
     const dashboardPage = new DashboardPage(authenticatedPage);
 
     await dashboardPage.goto();

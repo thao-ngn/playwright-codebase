@@ -3,33 +3,33 @@ name: test-report
 description: Generate, locate, and open the Playwright HTML test report in the report folder after tests run.
 ---
 
-# Xem Playwright test report
+# View the Playwright Test Report
 
-Dùng skill này khi cần chạy test, mở HTML report, hoặc kiểm tra kết quả test trong repository.
+Use this skill when running tests, opening the HTML report, or checking test results in the repository.
 
-## Tạo report
+## Generate the Report
 
-1. Kiểm tra `playwright.config.ts` để xác nhận HTML reporter đang ghi vào `report/`.
-2. Chạy test theo phạm vi người dùng yêu cầu:
+1. Check `playwright.config.ts` to confirm that the HTML reporter writes to `report/`.
+2. Run the tests requested by the user:
 
    ```bash
    npx playwright test
    ```
 
-   Có thể truyền đường dẫn test hoặc các tùy chọn Playwright nếu chỉ cần chạy một phần.
-3. Xác nhận lệnh chạy test đã hoàn tất. Không coi report cũ là kết quả của lần chạy hiện tại nếu test bị dừng trước khi tạo report mới.
+   Pass a test path or Playwright options to run only a subset of tests.
+3. Confirm that the test command completed. Do not treat an old report as the result of the current run if the tests stopped before generating a new report.
 
-## Mở và đọc report
+## Open and Read the Report
 
-- Mở report mới nhất bằng:
+- Open the latest report with:
 
   ```bash
   npx playwright show-report report
   ```
-- Kiểm tra tổng số test và trạng thái passed, failed, skipped; mở chi tiết các test lỗi và xem error, steps, attachments hoặc trace khi có.
-- Nếu không tìm thấy `report/index.html`, nêu rõ report chưa được tạo và báo lỗi/điều kiện khiến lần chạy test không hoàn tất; không tự kết luận test đã pass.
-- Không sửa hoặc xóa kết quả test để làm cho report thể hiện trạng thái thành công.
+- Check the total number of tests and the passed, failed, and skipped statuses. Open failed tests and inspect their errors, steps, attachments, or traces when available.
+- If `report/index.html` is missing, state that the report was not generated and describe the error or condition that prevented the test run from completing. Do not assume the tests passed.
+- Do not modify or delete test results to make the report show a successful status.
 
-## Báo cáo kết quả
+## Report the Results
 
-Tóm tắt lệnh chạy, trạng thái thực tế và vị trí report (`report/index.html`). Nêu riêng test thất bại, test bị bỏ qua và các giới hạn môi trường có ảnh hưởng đến kết quả.
+Summarize the command run, the actual status, and the report location (`report/index.html`). Separately note failed tests, skipped tests, and any environment limitations that affected the results.

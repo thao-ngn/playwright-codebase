@@ -4,7 +4,7 @@ import { DashboardPage } from '@pages/dashboard.page';
 import { requiredEnv } from '@environment/config';
 
 test.describe('Login', () => {
-  test('đăng nhập thành công với tài khoản hợp lệ', async ({ page }) => {
+  test('logs in successfully with valid credentials', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
 
@@ -15,7 +15,7 @@ test.describe('Login', () => {
     await dashboardPage.waitForWidgetsLoaded();
   });
 
-  test('hiển thị lỗi khi đăng nhập sai mật khẩu', async ({ page }) => {
+  test('shows an error when the password is incorrect', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.goto();
@@ -25,7 +25,7 @@ test.describe('Login', () => {
     expect(errorMessage.length).toBeGreaterThan(0);
   });
 
-  test('không đăng nhập khi bỏ trống username và mật khẩu', async ({ page }) => {
+  test('does not log in when the username and password are empty', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.goto();
@@ -34,7 +34,7 @@ test.describe('Login', () => {
     await expect(page).toHaveURL(/wp-login\.php/);
   });
 
-  test('không đăng nhập khi bỏ trống username', async ({ page }) => {
+  test('does not log in when the username is empty', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.goto();
@@ -43,7 +43,7 @@ test.describe('Login', () => {
     await expect(page).toHaveURL(/wp-login\.php/);
   });
 
-  test('hiển thị lỗi khi username không tồn tại', async ({ page }) => {
+  test('shows an error when the username does not exist', async ({ page }) => {
     const loginPage = new LoginPage(page);
 
     await loginPage.goto();

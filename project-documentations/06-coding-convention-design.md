@@ -1,45 +1,45 @@
-# Coding Convention
+# Coding Conventions
 
-> Mục đích: thống nhất quy tắc viết code trong toàn bộ project để dễ đọc, dễ maintain.
+> Purpose: Standardize coding rules across the project to improve readability and maintainability.
 
-## 1. Đặt tên
-- File test: `kebab-case.spec.ts` (vd `posts-crud.spec.ts`)
-- File page object: `kebab-case.page.ts`, class dùng `PascalCase` (vd `PostsPage`)
-- Biến, hàm: `camelCase`
-- Hằng số toàn cục: `UPPER_SNAKE_CASE`
-- Locator private trong Page class: đặt tên theo phần tử, không theo hành động (vd `submitButton`, không phải `clickSubmit`)
+## 1. Naming
+- Test files: `kebab-case.spec.ts` (for example, `posts-crud.spec.ts`).
+- Page Object files: `kebab-case.page.ts`; classes use `PascalCase` (for example, `PostsPage`).
+- Variables and functions: `camelCase`.
+- Global constants: `UPPER_SNAKE_CASE`.
+- Private locators in Page classes: name them after the element, not the action (for example, `submitButton`, not `clickSubmit`).
 
 ## 2. Async/await
-- Luôn dùng `await` cho mọi Playwright action (click, fill, goto...) — không bỏ sót, tránh race condition
-- Không dùng `.then()` trộn với `async/await` trong cùng 1 hàm
+- Always use `await` for every Playwright action (click, fill, goto, and so on) to avoid race conditions.
+- Do not mix `.then()` with `async/await` in the same function.
 
-## 3. Assertion
-- Ưu tiên **web-first assertion** của Playwright: `toBeVisible()`, `toBeEnabled()`, `toHaveText()`... thay vì lấy giá trị ra rồi so sánh bằng `toEqual()`
+## 3. Assertions
+- Prefer Playwright **web-first assertions** such as `toBeVisible()`, `toBeEnabled()`, and `toHaveText()` instead of reading a value and comparing it with `toEqual()`.
   ```ts
-  // Nên
+  // Preferred
   await expect(page.getByRole('button')).toBeVisible();
 
-  // Tránh
+  // Avoid
   const isVisible = await page.getByRole('button').isVisible();
   expect(isVisible).toEqual(true);
   ```
-- Assert response API (`toBeOK()`, status code) **trước khi** dùng giá trị từ response, để lỗi báo đúng chỗ thay vì crash mơ hồ ở dòng sau
+- Assert API responses (`toBeOK()`, status code) **before** using response values so failures are reported at the source instead of causing unclear errors later.
 
 ## 4. TypeScript
-- Bật `strict: true` trong `tsconfig.json`
-- Hạn chế dùng `any`; nếu bắt buộc dùng definite assignment assertion (`!`), phải có comment giải thích lý do
-- Định nghĩa `type`/`interface` cho mọi payload API và dữ liệu test phức tạp
+- Enable `strict: true` in `tsconfig.json`.
+- Avoid `any`. If a definite assignment assertion (`!`) is necessary, add a comment explaining why.
+- Define a `type` or `interface` for every API payload and complex test data.
 
-## 5. Test structure
-- Mỗi test độc lập, không phụ thuộc thứ tự chạy của test khác
-- Dùng `test.describe` để nhóm theo chức năng, `test.beforeEach`/`afterEach` cho setup/cleanup lặp lại
-- Không hard-code dữ liệu môi trường (URL, tài khoản) trong test — lấy từ `.env` qua `process.env`
+## 5. Test Structure
+- Keep each test independent; do not rely on the execution order of other tests.
+- Use `test.describe` to group tests by feature and `test.beforeEach`/`afterEach` for repeated setup and cleanup.
+- Do not hard-code environment data (URLs, accounts) in tests; read it from `.env` through `process.env`.
 
-## 6. Locator
-- Thứ tự ưu tiên: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS > XPath (hạn chế tối đa)
-- Không dùng locator dựa vào vị trí DOM dễ đổi (nth-child...) trừ khi không còn lựa chọn khác
+## 6. Locators
+- Preference order: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS > XPath (use XPath only as a last resort).
+- Avoid locators based on unstable DOM positions (such as `nth-child`) unless there is no alternative.
 
-## 7. Git & commit
-- Nhánh: `feature/<ten-tinh-nang>`, `fix/<mo-ta-loi>`
-- Commit message: dạng `<type>: <mô tả ngắn>` (vd `feat: add login page object`, `fix: flaky wait in posts test`)
-- Không commit file `.env`, `node_modules`, report/output test
+## 7. Git and Commits
+- Branches: `feature/<feature-name>`, `fix/<issue-description>`.
+- Commit messages: `<type>: <short description>` (for example, `feat: add login page object`, `fix: flaky wait in posts test`).
+- Do not commit `.env`, `node_modules`, or test reports/output.

@@ -1,4 +1,4 @@
-// Framework-agnostic: không import Playwright test/expect ở đây để có thể unit test riêng nếu cần
+// Framework-agnostic: do not import Playwright test/expect here so this can be unit-tested independently if needed.
 
 export function randomEmail(prefix = 'testuser'): string {
   return `${prefix}_${Date.now()}@example.com`;

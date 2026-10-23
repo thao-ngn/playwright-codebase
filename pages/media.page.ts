@@ -15,7 +15,7 @@ export class MediaPage extends BasePage {
   }
 
   async uploadFile(filePath: string): Promise<void> {
-    // Input file bị ẩn nên phải dùng setInputFiles thay vì click + chọn file qua dialog OS
+    // The file input is hidden, so use setInputFiles instead of clicking and selecting a file in the OS dialog.
     await this.fileInput().setInputFiles(filePath);
     await this.uploadingSpinner().waitFor({ state: 'detached' });
   }

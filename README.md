@@ -1,54 +1,54 @@
 # playwright-codebase
 
-Bộ test automation bằng [Playwright](https://playwright.dev/) cho trang **WP-Admin** tại `pw-practice-dev.playwrightvn.com/wp-admin`, viết bằng TypeScript theo mô hình Page Object Model (POM).
+Playwright automation tests for **WP-Admin** at `pw-practice-dev.playwrightvn.com/wp-admin`, written in TypeScript using the Page Object Model (POM).
 
-## Tài liệu thiết kế
+## Design Documentation
 
-Toàn bộ quá trình phân tích và thiết kế trước khi code được ghi lại trong `project-documentations/`:
+The analysis and design decisions made before implementation are documented in `project-documentations/`:
 
-| # | File | Nội dung |
+| # | File | Content |
 |---|---|---|
-| 1 | [01-website-feature.md](./project-documentations/01-website-feature.md) | Khảo sát các tính năng của website, lưu ý khi test |
-| 2 | [02-folder-design.md](./project-documentations/02-folder-design.md) | Thiết kế cấu trúc thư mục project |
-| 3 | [03-pom-design.md](./project-documentations/03-pom-design.md) | Thiết kế Page Object Model |
-| 4 | [04-utils-design.md](./project-documentations/04-utils-design.md) | Thiết kế các hàm tiện ích (utils) |
-| 5 | [05-fixture-design.md](./project-documentations/05-fixture-design.md) | Thiết kế fixture dùng trong test |
-| 6 | [06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) | Coding convention dùng trong project |
+| 1 | [01-website-feature.md](./project-documentations/01-website-feature.md) | Website feature analysis and testing notes |
+| 2 | [02-folder-design.md](./project-documentations/02-folder-design.md) | Project folder structure |
+| 3 | [03-pom-design.md](./project-documentations/03-pom-design.md) | Page Object Model design |
+| 4 | [04-utils-design.md](./project-documentations/04-utils-design.md) | Utility function design |
+| 5 | [05-fixture-design.md](./project-documentations/05-fixture-design.md) | Test fixture design |
+| 6 | [06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) | Project coding conventions |
 
-## Cấu trúc thư mục
+## Folder Structure
 
 ```
 playwright-codebase/
-├── project-documentations/   # Tài liệu thiết kế (xem bảng trên)
+├── project-documentations/   # Design documentation (see the table above)
 ├── tests/                    # Test spec (e2e, api)
-├── report/                   # HTML report được tạo sau khi chạy test
-├── api/                      # REST API helpers dùng để seed/cleanup dữ liệu
+├── report/                   # HTML report generated after tests run
+├── api/                      # REST API helpers for seeding and cleaning up data
 ├── pages/                    # Page Object Model classes
 ├── fixtures/                 # Custom Playwright fixtures
 ├── utils/                    # Helper functions
-├── test-data/                # Dữ liệu test tĩnh
-├── environment/              # Cấu hình môi trường và mẫu biến môi trường
+├── test-data/                # Static test data
+├── environment/              # Environment configuration and sample variables
 ├── .github/workflows/        # CI pipeline (GitHub Actions)
-├── .env                      # Biến môi trường (KHÔNG commit)
+├── .env                      # Environment variables (DO NOT commit)
 ├── playwright.config.ts
 └── package.json
 ```
 
-## Cấu hình môi trường
+## Environment Setup
 
-Tạo file `.env` ở thư mục gốc từ mẫu `environment/.env.example`, sau đó điền URL và tài khoản test. Không commit `.env` hoặc thông tin đăng nhập:
+Create a `.env` file in the project root from `environment/.env.example`, then provide the test URL and account credentials. Do not commit `.env` or credentials:
 
 ```powershell
 Copy-Item environment\.env.example .env
 ```
 
-Các API test mẫu nằm trong `tests/api/`; có thể chạy riêng bằng `npx playwright test tests/api`.
+Example API tests are in `tests/api/` and can be run separately with `npx playwright test tests/api`.
 
-## Yêu cầu môi trường
+## Requirements
 - Node.js >= 18
 - npm
 
-## Cài đặt
+## Installation
 
 ```bash
 git clone <repo-url>
@@ -57,26 +57,26 @@ npm install
 npx playwright install
 ```
 
-## Chạy test
+## Running Tests
 
 ```bash
-# Chạy toàn bộ test
+# Run all tests
 npx playwright test
 
-# Chạy 1 file test cụ thể
+# Run a specific test file
 npx playwright test tests/e2e/auth/login.spec.ts
 
-# Chạy với UI mode (debug trực quan)
+# Run in UI mode (interactive debugging)
 npx playwright test --ui
 
-# Xem HTML report sau khi chạy test
+# Open the HTML report after the test run
 npx playwright show-report report
 ```
 
 ## CI/CD
 
-Pipeline chạy tự động qua GitHub Actions, cấu hình tại [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml).
+The pipeline runs automatically through GitHub Actions and is configured in [`.github/workflows/playwright.yml`](./.github/workflows/playwright.yml).
 
-## Coding convention
+## Coding Conventions
 
-[06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) - quy tắc đặt tên, async/await, assertion, locator strategy...
+[06-coding-convention-design.md](./project-documentations/06-coding-convention-design.md) - naming, async/await, assertions, locator strategy, and more.

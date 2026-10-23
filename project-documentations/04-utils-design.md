@@ -1,8 +1,8 @@
-# Utils Design
+# Utilities Design
 
-> Mục đích: liệt kê các hàm tiện ích dùng chung, tránh lặp code giữa các test.
+> Purpose: List shared utility functions to avoid duplicating code across tests.
 
-## 1. `data-generator.ts` — sinh dữ liệu test
+## 1. `data-generator.ts` — Generate Test Data
 ```ts
 export function randomEmail(prefix = 'testuser'): string {
   return `${prefix}_${Date.now()}@example.com`;
@@ -16,13 +16,13 @@ export function randomPostTitle(): string {
   return `Test Post ${Date.now()}`;
 }
 ```
-- Nguyên tắc: mọi dữ liệu tạo ra trong test phải **unique** (dùng timestamp/random) để tránh conflict khi chạy song song hoặc chạy lại nhiều lần.
+- Principle: All test data must be **unique** (use timestamps or random values) to avoid conflicts during parallel runs or reruns.
 
-## 2. `api-helper.ts` — gọi API để seed/cleanup dữ liệu
+## 2. `api-helper.ts` — Seed and Clean Up Data Through the API
 ```ts
 export async function createUserViaApi(request: APIRequestContext, userData: UserPayload) {
   const res = await request.post('/wp-json/wp/v2/users', { data: userData });
-  await expect(res).toBeOK(); // assert trước khi lấy giá trị, tránh lỗi khó hiểu khi response fail
+  await expect(res).toBeOK(); // Assert before reading the value to avoid unclear errors when the response fails.
   return res.json();
 }
 
@@ -33,13 +33,13 @@ export async function deleteUserViaApi(request: APIRequestContext, userId: numbe
 }
 
 export async function loginViaApi(request: APIRequestContext, username: string, password: string) {
-  // Lấy token/cookie để dùng cho storageState hoặc gọi API tiếp theo
+  // Retrieve a token/cookie for storageState or subsequent API calls.
 }
 ```
-- Mục đích chính: **seed dữ liệu nhanh qua API** thay vì tạo qua UI (giúp test UI chỉ tập trung vào hành vi cần test, giảm thời gian chạy)
-- Luôn cleanup (xoá) dữ liệu đã tạo trong `afterEach`/`afterAll` để tránh rác tồn đọng trên môi trường test dùng chung
+- Main purpose: **Seed data quickly through the API** instead of creating it through the UI. This keeps UI tests focused on the behavior under test and reduces execution time.
+- Always clean up created data in `afterEach`/`afterAll` to avoid leaving residual data in a shared test environment.
 
-## 3. `wait-helper.ts` — các hàm chờ dùng chung
+## 3. `wait-helper.ts` — Shared Wait Helpers
 ```ts
 export async function waitForWpNotice(page: Page, text?: string) {
   const notice = page.locator('.notice, .updated');
@@ -47,9 +47,9 @@ export async function waitForWpNotice(page: Page, text?: string) {
   if (text) await expect(notice).toContainText(text);
 }
 ```
-- Dùng cho các trường hợp WP-Admin hiện thông báo dạng banner sau khi thao tác (save, delete, update...)
+- Use this when WP-Admin displays a banner notification after an action (save, delete, update, and so on).
 
-## Quy tắc chung cho utils
-- Không import Playwright `test`/`expect` trực tiếp vào các hàm thuần data-generator (giữ chúng framework-agnostic, dễ unit test riêng nếu cần)
-- Mỗi hàm nên có kiểu dữ liệu rõ ràng (input/output types) để tránh lỗi ngầm khi dùng ở nhiều nơi
-- Không đặt logic nghiệp vụ phức tạp trong utils — nếu logic gắn chặt với một trang cụ thể, nó nên nằm trong Page class (xem 03-pom-design.md)
+## General Utility Guidelines
+- Do not import Playwright `test`/`expect` directly into pure data-generator functions. Keep them framework-agnostic so they can be unit-tested independently if needed.
+- Give each function clear input and output types to prevent subtle errors when it is used in multiple places.
+- Do not put complex business logic in utilities. Logic tightly coupled to a specific page belongs in its Page class (see `03-pom-design.md`).

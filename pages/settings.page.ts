@@ -26,7 +26,7 @@ export class SettingsPage extends BasePage {
     await expect(this.page.getByText('Permalink structure updated.')).toBeVisible();
   }
 
-  // Đổi Permalinks ảnh hưởng toàn site nên luôn có cách khôi phục về mặc định (Plain)
+  // Changing Permalinks affects the entire site, so always restore the default (Plain) structure.
   async resetToDefault(): Promise<void> {
     await this.updatePermalink('Plain');
   }

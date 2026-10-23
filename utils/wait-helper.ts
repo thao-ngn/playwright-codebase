@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
 
-// WP-Admin thường show notice/toast dạng banner sau khi thao tác (save, delete, update...)
+// WP-Admin often displays a banner notice or toast after an action (save, delete, update, and so on).
 export async function waitForWpNotice(page: Page, text?: string): Promise<void> {
   const notice = page.locator('.notice, .updated').first();
   await notice.waitFor({ state: 'visible' });

@@ -1,4 +1,4 @@
-# Environment variables - chứa thông tin (tài khoản, mật khẩu), KHÔNG push lên repo
+# Environment variables - contain credentials (accounts, passwords); never push them to the repository
 .env
 .env.local
 .env.*.local

@@ -3,37 +3,37 @@ name: create-testscript
 description: Create or update Playwright end-to-end test scripts in this TypeScript Page Object Model repository. Use when asked to add, generate, or modify a test script.
 ---
 
-# Tạo Playwright test script
+# Create a Playwright Test Script
 
-Tạo test script đúng cấu trúc và quy ước của repository, ưu tiên test ổn định, độc lập và dễ bảo trì.
+Create test scripts that follow the repository's structure and conventions, prioritizing stability, independence, and maintainability.
 
-## Trước khi viết test
+## Before Writing Tests
 
-1. Đọc `project-documentations/01-website-feature.md` để hiểu hành vi và rủi ro của tính năng.
-2. Đọc `project-documentations/03-pom-design.md`, `project-documentations/05-fixture-design.md` và `project-documentations/06-coding-convention-design.md`.
-3. Xem một test gần với chức năng cần làm trong `tests/e2e/`, Page Object tương ứng trong `pages/` và fixture cần dùng trong `fixtures/`.
-4. Kiểm tra cấu hình trong `playwright.config.ts` và alias/import hiện có trước khi chọn lệnh chạy hoặc cách import.
+1. Read `project-documentations/01-website-feature.md` to understand the feature's behavior and risks.
+2. Read `project-documentations/03-pom-design.md`, `project-documentations/05-fixture-design.md`, and `project-documentations/06-coding-convention-design.md`.
+3. Review a related test in `tests/e2e/`, its Page Object in `pages/`, and any required fixtures in `fixtures/`.
+4. Check `playwright.config.ts` and existing aliases/imports before choosing a test command or import style.
 
-## Vị trí và cách đặt tên
+## Location and Naming
 
-- Đặt UI end-to-end test trong `tests/e2e/<module>/`.
-- Dùng tên file `kebab-case.spec.ts`, mô tả chức năng được kiểm thử, ví dụ `posts-crud.spec.ts`.
-- Nhóm các test liên quan bằng `test.describe()`; mỗi `test()` chỉ kiểm tra một hành vi hoặc một luồng nghiệp vụ rõ ràng.
-- Dùng tên test mô tả kết quả mong đợi. Theo ngôn ngữ và cách đặt tên hiện có trong module.
+- Place UI end-to-end tests in `tests/e2e/<module>/`.
+- Use a descriptive `kebab-case.spec.ts` filename, such as `posts-crud.spec.ts`.
+- Group related tests with `test.describe()`; each `test()` should cover one behavior or clear business flow.
+- Name tests after their expected outcomes. Follow the language and naming conventions used in the module.
 
-## Viết test
+## Writing Tests
 
-- Import `test` và `expect` từ `@fixtures/auth.fixture` cho luồng cần đăng nhập sẵn. Với luồng đăng nhập, xác thực thất bại hoặc cần trạng thái chưa đăng nhập, dùng fixture Playwright phù hợp như `@playwright/test`.
-- Thao tác trang qua Page Object trong `pages/`. Nếu thiếu hành vi cần thiết, thêm method và locator vào Page Object phù hợp thay vì đưa chi tiết thao tác DOM vào test.
-- Dùng locator ưu tiên theo thứ tự: `getByRole`, `getByLabel`, `getByText`, `getByTestId`, CSS; chỉ dùng XPath khi không có lựa chọn phù hợp.
-- Luôn `await` cho thao tác bất đồng bộ của Playwright; không trộn `.then()` với `async/await`.
-- Dùng web-first assertions như `toBeVisible()`, `toHaveText()`, `toHaveURL()` và `toBeEnabled()`. Tránh đọc trạng thái trước rồi so sánh thủ công.
-- Mỗi test phải tự thiết lập dữ liệu và trạng thái cần thiết; không dựa vào thứ tự chạy hay dữ liệu do test khác tạo.
-- Tạo dữ liệu duy nhất bằng helper hiện có trong `utils/` khi cần. Ưu tiên seed/cleanup qua API hoặc fixture hiện có; nếu test tạo dữ liệu qua UI thì dọn dẹp dữ liệu đó để không làm bẩn môi trường.
-- Không hard-code URL, tài khoản hoặc bí mật môi trường trong test. Tái sử dụng biến môi trường và fixtures hiện có; không thêm hoặc ghi giá trị bí mật vào repository.
-- Với các thao tác có ảnh hưởng rộng hoặc khó khôi phục (ví dụ thay đổi Settings), xác định cách khôi phục trạng thái trong cùng test/fixture trước khi triển khai.
+- Import `test` and `expect` from `@fixtures/auth.fixture` for flows that require an authenticated session. For login flows, failed authentication, or unauthenticated states, use an appropriate Playwright fixture such as `@playwright/test`.
+- Interact with pages through Page Objects in `pages/`. If a required behavior is missing, add a method and locator to the appropriate Page Object instead of putting DOM interaction details in the test.
+- Prefer locators in this order: `getByRole`, `getByLabel`, `getByText`, `getByTestId`, then CSS. Use XPath only when no suitable alternative exists.
+- Always `await` asynchronous Playwright actions; do not mix `.then()` with `async/await`.
+- Use web-first assertions such as `toBeVisible()`, `toHaveText()`, `toHaveURL()`, and `toBeEnabled()`. Avoid reading state and comparing it manually.
+- Each test must establish its own required data and state; do not rely on execution order or data created by another test.
+- Generate unique data with existing helpers in `utils/` when needed. Prefer seeding and cleanup through existing APIs or fixtures. If a test creates data through the UI, clean it up to avoid polluting the environment.
+- Do not hard-code URLs, accounts, or environment secrets in tests. Reuse existing environment variables and fixtures; never add or write secret values to the repository.
+- For actions with broad impact or difficult recovery (for example, changing Settings), determine how to restore the state in the same test or fixture before implementation.
 
-## Mẫu cấu trúc
+## Example Structure
 
 ```ts
 import { test, expect } from '@fixtures/auth.fixture';
@@ -41,12 +41,12 @@ import { PostsPage } from '@pages/posts.page';
 import { randomPostTitle } from '@utils/data-generator';
 
 test.describe('Posts', () => {
-  test('tạo post mới và hiển thị trong danh sách', async ({ authenticatedPage }) => {
+  test('creates a post and shows it in the list', async ({ authenticatedPage }) => {
     const postsPage = new PostsPage(authenticatedPage);
     const title = randomPostTitle();
 
     await postsPage.goto();
-    await postsPage.createPost(title, 'Nội dung test.');
+    await postsPage.createPost(title, 'Automated test content.');
 
     await postsPage.goto();
     await postsPage.searchPost(title);
@@ -57,11 +57,11 @@ test.describe('Posts', () => {
 });
 ```
 
-Điều chỉnh mẫu theo module và APIs thực tế trong repository; không sao chép một luồng ví dụ khi nó không phù hợp với yêu cầu.
+Adapt the example to the module and APIs actually used in the repository; do not copy a flow that does not fit the requirement.
 
-## Xác minh sau khi viết
+## Verification
 
-1. Chạy test vừa tạo bằng `npx playwright test <đường-dẫn-file>`.
-2. Nếu test cần tài khoản, trình duyệt hoặc website không khả dụng, không giả định test đã pass; nêu rõ phần chưa xác minh và lỗi/điều kiện bị thiếu.
-3. Nếu không thể chạy test tích hợp, kiểm tra ít nhất test được nhận diện bằng `npx playwright test <đường-dẫn-file> --list`.
-4. Báo ngắn gọn file đã thêm/sửa và kết quả xác minh.
+1. Run the new test with `npx playwright test <file-path>`.
+2. If the test requires an unavailable account, browser, or website, do not assume it passed; clearly state what could not be verified and the error or missing prerequisite.
+3. If the integration test cannot run, at minimum confirm that Playwright discovers it with `npx playwright test <file-path> --list`.
+4. Briefly report the files added or changed and the verification results.

@@ -24,7 +24,7 @@ export class PostsPage extends BasePage {
     await this.contentEditor().click();
     await this.page.keyboard.type(content);
 
-    // Nút Publish có 2 bước: click lần 1 mở panel xác nhận, click lần 2 (trong panel) mới thực sự publish
+    // Publishing takes two steps: the first click opens the confirmation panel; the second click in the panel publishes.
     await this.publishButton().click();
     await this.publishButton().last().click();
 

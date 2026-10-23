@@ -4,7 +4,7 @@ import { randomEmail, randomUsername, randomPassword } from '@utils/data-generat
 import { requiredEnv } from '@environment/config';
 
 test.describe('Users', () => {
-  test('chuyển người dùng chưa đăng nhập về login khi mở danh sách Users', async ({ page }) => {
+  test('redirects unauthenticated users to login when opening the Users list', async ({ page }) => {
     const usersPage = new UsersPage(page);
 
     await usersPage.goto();
@@ -12,7 +12,7 @@ test.describe('Users', () => {
     await expect(page).toHaveURL(/wp-login\.php/);
   });
 
-  test('tạo mới user và đổi role', async ({ authenticatedPage }) => {
+  test('creates a user and changes their role', async ({ authenticatedPage }) => {
     const usersPage = new UsersPage(authenticatedPage);
     const username = randomUsername();
 
@@ -28,7 +28,7 @@ test.describe('Users', () => {
     await usersPage.deleteUser(username);
   });
 
-  test('từ chối tạo user với email sai định dạng', async ({ authenticatedPage }) => {
+  test('rejects creating a user with an invalid email address', async ({ authenticatedPage }) => {
     const usersPage = new UsersPage(authenticatedPage);
 
     await usersPage.goto();
@@ -44,7 +44,7 @@ test.describe('Users', () => {
     await expect(authenticatedPage.getByText('New user created.')).not.toBeVisible();
   });
 
-  test('từ chối tạo user với username đã tồn tại', async ({ authenticatedPage }) => {
+  test('rejects creating a user with an existing username', async ({ authenticatedPage }) => {
     const usersPage = new UsersPage(authenticatedPage);
 
     await usersPage.goto();
@@ -58,7 +58,7 @@ test.describe('Users', () => {
     await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
   });
 
-  test('từ chối tạo user với email đã được sử dụng', async ({ authenticatedPage, testUser }) => {
+  test('rejects creating a user with an email address that is already in use', async ({ authenticatedPage, testUser }) => {
     const usersPage = new UsersPage(authenticatedPage);
 
     await usersPage.goto();
@@ -72,7 +72,7 @@ test.describe('Users', () => {
     await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
   });
 
-  test('xoá user đã seed qua API và gán nội dung cho admin', async ({ authenticatedPage, testUser }) => {
+  test('deletes an API-seeded user and reassigns their content to the admin', async ({ authenticatedPage, testUser }) => {
     const usersPage = new UsersPage(authenticatedPage);
 
     await usersPage.goto();

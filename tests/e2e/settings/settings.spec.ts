@@ -8,7 +8,7 @@ test.describe('Settings', () => {
     await settingsPage.resetToDefault();
   });
 
-  test('đổi permalink structure sang Post name', async ({ authenticatedPage }) => {
+  test('changes the permalink structure to Post name', async ({ authenticatedPage }) => {
     const settingsPage = new SettingsPage(authenticatedPage);
 
     await settingsPage.gotoPermalinks();
@@ -17,7 +17,7 @@ test.describe('Settings', () => {
     await expect(authenticatedPage.getByText('Permalink structure updated.')).toBeVisible();
   });
 
-  test('đổi permalink structure sang Day and name', async ({ authenticatedPage }) => {
+  test('changes the permalink structure to Day and name', async ({ authenticatedPage }) => {
     const settingsPage = new SettingsPage(authenticatedPage);
 
     await settingsPage.gotoPermalinks();
@@ -26,7 +26,7 @@ test.describe('Settings', () => {
     await expect(authenticatedPage.getByText('Permalink structure updated.')).toBeVisible();
   });
 
-  test('loại bỏ ký tự không hợp lệ khỏi custom permalink structure', async ({ authenticatedPage }) => {
+  test('removes invalid characters from the custom permalink structure', async ({ authenticatedPage }) => {
     const settingsPage = new SettingsPage(authenticatedPage);
 
     await settingsPage.gotoPermalinks();
@@ -37,7 +37,7 @@ test.describe('Settings', () => {
 });
 
 test.describe('Settings access control', () => {
-  test('chuyển người dùng chưa đăng nhập về login khi mở Permalinks', async ({ page }) => {
+  test('redirects unauthenticated users to login when opening Permalinks', async ({ page }) => {
     const settingsPage = new SettingsPage(page);
 
     await settingsPage.gotoPermalinks();

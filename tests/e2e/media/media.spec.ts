@@ -5,7 +5,7 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { MediaPage } from '@pages/media.page';
 
 test.describe('Media Library', () => {
-  test('từ chối upload tệp có định dạng không được hỗ trợ', async ({ authenticatedPage }) => {
+  test('rejects uploading a file with an unsupported format', async ({ authenticatedPage }) => {
     const mediaPage = new MediaPage(authenticatedPage);
     const filePath = path.join(os.tmpdir(), `unsupported-${Date.now()}.exe`);
 
@@ -21,12 +21,12 @@ test.describe('Media Library', () => {
     }
   });
 
-  test('upload file và chỉnh sửa alt text', async ({ authenticatedPage }) => {
+  test('uploads a file and edits its alt text', async ({ authenticatedPage }) => {
     const mediaPage = new MediaPage(authenticatedPage);
     const fileName = `sample-${Date.now()}.png`;
     const filePath = path.join(os.tmpdir(), fileName);
 
-    // Ảnh PNG 1x1px hợp lệ, đủ nhỏ để upload nhanh trong test
+    // This valid 1x1px PNG is small enough for a fast test upload.
     fs.writeFileSync(
       filePath,
       Buffer.from(
@@ -37,9 +37,9 @@ test.describe('Media Library', () => {
 
     await mediaPage.goto();
     await mediaPage.uploadFile(filePath);
-    await mediaPage.editAltText(fileName, 'Ảnh mẫu dùng cho test tự động');
+    await mediaPage.editAltText(fileName, 'Sample image for automated testing');
 
-    await expect(authenticatedPage.getByLabel('Alternative Text')).toHaveValue('Ảnh mẫu dùng cho test tự động');
+    await expect(authenticatedPage.getByLabel('Alternative Text')).toHaveValue('Sample image for automated testing');
 
     await mediaPage.goto();
     await mediaPage.deleteFile(fileName);
@@ -47,7 +47,7 @@ test.describe('Media Library', () => {
 });
 
 test.describe('Media Library access control', () => {
-  test('chuyển người dùng chưa đăng nhập về login khi mở Media Library', async ({ page }) => {
+  test('redirects unauthenticated users to login when opening the Media Library', async ({ page }) => {
     const mediaPage = new MediaPage(page);
 
     await mediaPage.goto();

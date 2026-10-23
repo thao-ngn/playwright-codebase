@@ -14,7 +14,7 @@ type UserFixtures = {
 };
 
 export const test = base.extend<UserFixtures>({
-  // Seed user qua API (nhanh, ổn định) thay vì tạo qua UI
+  // Seed the user through the API (faster and more reliable) instead of creating it through the UI.
   testUser: async ({ request }, use) => {
     const userData = {
       username: randomUsername(),
@@ -25,7 +25,7 @@ export const test = base.extend<UserFixtures>({
 
     await use({ ...userData, id: created.id });
 
-    // Chạy sau khi test dùng xong fixture, kể cả khi test fail
+    // Runs after the test, whether it passes or fails.
     await deleteUserViaApi(request, created.id);
   },
 });

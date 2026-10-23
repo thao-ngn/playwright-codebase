@@ -1,56 +1,56 @@
 # Website Feature Analysis — WP-Admin (pw-practice-dev.playwrightvn.com)
 
-> Mục đích: ghi lại các tính năng chính của trang WP-Admin cần test, cùng những lưu ý/khó khăn gặp phải trong quá trình khảo sát và test thử bằng tay. File này là input cho việc thiết kế POM (03) và Fixture (05).
+> Purpose: Document the main WP-Admin features to test, along with observations and challenges found during exploration and manual testing. This document informs the POM (03) and Fixture (05) designs.
 
-## 1. Đăng nhập (Login)
+## 1. Login
 - URL: `/wp-login.php`
-- Action: đăng nhập bằng username/password, "Remember Me", quên mật khẩu
-- Lưu ý:
-  - Sau khi login thành công, redirect về `/wp-admin/` — cần chờ network idle vì trang load nhiều widget dashboard
-  - Sai mật khẩu 3 lần liên tiếp có thể bị giới hạn (rate limit) → cần tách test data, không spam login sai trong CI
+- Actions: Sign in with a username and password, select "Remember Me", and recover a forgotten password.
+- Notes:
+  - Successful login redirects to `/wp-admin/`. Wait for network idle because the dashboard loads many widgets.
+  - Three consecutive incorrect passwords may trigger rate limiting. Use isolated test data and avoid repeatedly submitting invalid credentials in CI.
 
 ## 2. Dashboard
-- Các widget: "At a Glance", "Activity", "Quick Draft", "WordPress Events and News"
-- Lưu ý:
-  - Các widget load bất đồng bộ (AJAX) → không nên assert ngay khi trang vừa load xong, cần đợi widget cụ thể xuất hiện
-  - Vị trí widget có thể bị người dùng kéo-thả tuỳ chỉnh → không nên dựa vào vị trí DOM cố định
+- Widgets: "At a Glance", "Activity", "Quick Draft", and "WordPress Events and News".
+- Notes:
+  - Widgets load asynchronously (AJAX). Do not assert immediately after page load; wait for the specific widget to appear.
+  - Users can customize widget positions by dragging and dropping. Avoid relying on fixed DOM positions.
 
 ## 3. Posts
-- Action: tạo mới, sửa, xoá (chuyển vào Trash), khôi phục, xoá vĩnh viễn, tìm kiếm, lọc theo category/tag, bulk action (xoá nhiều, đổi trạng thái nhiều)
-- Lưu ý:
-  - Trình soạn thảo Gutenberg (block editor) load chậm hơn các trang list — cần timeout riêng
-  - Nút "Publish" có 2 bước (click Publish → hiện popup confirm → click Publish lần nữa)
+- Actions: Create, edit, move to Trash, restore, permanently delete, search, filter by category or tag, and perform bulk actions (such as deleting multiple posts or changing their status).
+- Notes:
+  - The Gutenberg block editor loads more slowly than list pages; use a suitable timeout.
+  - Publishing takes two steps: click "Publish" to open the confirmation panel, then click "Publish" again.
 
 ## 4. Media Library
-- Action: upload file, xoá file, chỉnh sửa metadata (alt text, caption), lọc theo loại file
-- Lưu ý:
-  - Upload dùng input file ẩn (`<input type="file" hidden>`) → cần dùng `setInputFiles`
-  - Sau khi upload xong có thời gian xử lý resize ảnh (spinner loading) trước khi item xuất hiện trong grid
+- Actions: Upload and delete files, edit metadata (alt text and caption), and filter by file type.
+- Notes:
+  - Upload uses a hidden file input (`<input type="file" hidden>`); use `setInputFiles`.
+  - Image resizing may take time after upload. Wait for the loading spinner to disappear before expecting the item in the grid.
 
 ## 5. Pages
-- Tương tự Posts nhưng không có category/tag, có thêm "Page Attributes" (parent page, template, order)
+- Similar to Posts, but without categories or tags. Pages also have "Page Attributes" (parent page, template, and order).
 
 ## 6. Comments
-- Action: duyệt (approve), đánh dấu spam, trả lời, xoá, bulk action
-- Lưu ý: danh sách comment có thể trống ở môi trường test mới dựng → cần seed dữ liệu comment trước khi test
+- Actions: Approve, mark as spam, reply, delete, and perform bulk actions.
+- Note: A newly provisioned test environment may have no comments. Seed comments before testing.
 
 ## 7. Users
-- Action: tạo user mới, sửa profile, đổi role, xoá user, đổi mật khẩu
-- Lưu ý:
-  - Xoá user có popup hỏi "gán lại nội dung cho user khác hay xoá luôn" → cần xử lý 2 trường hợp
-  - Đây là khu vực đang có test suite API riêng (xem `project-documentations` phần API) nên phần UI có thể tái sử dụng data từ API test
+- Actions: Create users, edit profiles, change roles, delete users, and change passwords.
+- Notes:
+  - Deleting a user prompts whether to reassign their content to another user or delete it. Cover both cases.
+  - This area has a separate API test suite (see the API documentation in `project-documentations`), so UI tests can reuse data from API tests.
 
 ## 8. Plugins
-- Action: activate/deactivate, xoá plugin, cài plugin mới
-- Lưu ý: activate/deactivate có thể trigger redirect hoặc thông báo lỗi nếu plugin conflict — môi trường test không nên cài plugin thật ngẫu nhiên
+- Actions: Activate or deactivate plugins, delete plugins, and install new plugins.
+- Note: Activating or deactivating a plugin may trigger a redirect or an error if plugins conflict. Avoid installing arbitrary plugins in the test environment.
 
 ## 9. Settings
-- Các trang con: General, Writing, Reading, Discussion, Permalinks
-- Lưu ý: đổi Permalinks có thể ảnh hưởng đến toàn bộ URL của site → cẩn thận khi test, nên restore lại giá trị mặc định sau khi test (dùng `afterEach`)
+- Subpages: General, Writing, Reading, Discussion, and Permalinks.
+- Note: Changing Permalinks can affect every URL on the site. Test carefully and restore the default value after each test (using `afterEach`).
 
-## Độ ưu tiên test (đề xuất)
-1. Login (nền tảng cho mọi flow khác)
-2. Users (đã có sẵn API test, mở rộng sang UI)
-3. Posts (chức năng lõi, nhiều thao tác nhất)
-4. Media, Pages, Comments
-5. Plugins, Settings (rủi ro cao, ảnh hưởng toàn site — làm sau cùng, cẩn thận cleanup)
+## Suggested Test Priorities
+1. Login (the foundation for all other flows)
+2. Users (API tests already exist; extend coverage to the UI)
+3. Posts (core functionality with the most actions)
+4. Media, Pages, and Comments
+5. Plugins and Settings (higher risk and site-wide impact; test last and clean up carefully)

@@ -23,7 +23,7 @@ export class DashboardPage extends BasePage {
     return this.quickDraftWidget().getByRole('button', { name: 'Save Draft' });
   }
 
-  // Các widget load bất đồng bộ (AJAX) nên chờ từng widget xuất hiện thay vì chờ chung load state
+  // Widgets load asynchronously (AJAX), so wait for each widget instead of relying on a general page load state.
   async waitForWidgetsLoaded(): Promise<void> {
     await expect(this.atAGlanceWidget()).toBeVisible();
     await expect(this.activityWidget()).toBeVisible();

@@ -1,14 +1,14 @@
 # Page Object Model Design
 
-> Mục đích: thiết kế các Page class, quy tắc locator, và cách test file sẽ gọi vào các Page class.
+> Purpose: Define Page classes, locator conventions, and how test files use Page classes.
 
-## Nguyên tắc chung
-- Mỗi Page class đại diện cho **một trang/khu vực chức năng** của WP-Admin (map trực tiếp với các mục ở `01-website-feature.md`)
-- Test file **không** được truy cập locator trực tiếp — chỉ gọi các action method có tên rõ nghĩa (vd `usersPage.createUser(data)`), Page class chịu trách nhiệm ẩn chi tiết DOM
-- Locator ưu tiên theo thứ tự: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS selector (hạn chế) > XPath (tránh dùng, chỉ khi không còn cách khác)
-- Mỗi method trả về Promise, luôn có `await` khi gọi các action bất đồng bộ
+## General Principles
+- Each Page class represents **one WP-Admin page or functional area**, mapped directly to a section in `01-website-feature.md`.
+- Test files **must not** access locators directly. They should call clearly named action methods (for example, `usersPage.createUser(data)`); the Page class encapsulates DOM details.
+- Prefer locators in this order: `getByRole` > `getByLabel` > `getByText` > `getByTestId` > CSS selector (sparingly) > XPath (avoid unless no alternative exists).
+- Each method returns a Promise. Always `await` asynchronous actions.
 
-## BasePage
+## `BasePage`
 ```ts
 // pages/base.page.ts
 export class BasePage {
@@ -19,23 +19,23 @@ export class BasePage {
   }
 
   async waitForToast(message?: string) {
-    // WP-Admin thường show notice/toast sau action — chờ chung ở đây
+    // WP-Admin often displays a notice or toast after an action; wait for it here.
   }
 }
 ```
 
-## Danh sách Page class dự kiến
+## Planned Page Classes
 
-| Page class | Khu vực | Method chính (ví dụ) |
+| Page class | Area | Main methods (examples) |
 |---|---|---|
-| `LoginPage` | Đăng nhập | `login(username, password)`, `getErrorMessage()` |
-| `DashboardPage` | Trang chủ admin | `waitForWidgetsLoaded()` |
+| `LoginPage` | Login | `login(username, password)`, `getErrorMessage()` |
+| `DashboardPage` | Admin dashboard | `waitForWidgetsLoaded()` |
 | `PostsPage` | Posts | `createPost(title, content)`, `deletePost(title)`, `searchPost(keyword)`, `bulkDelete(titles[])` |
 | `MediaPage` | Media Library | `uploadFile(filePath)`, `deleteFile(fileName)`, `editAltText(fileName, text)` |
 | `UsersPage` | Users | `createUser(userData)`, `deleteUser(username, reassignTo?)`, `changeRole(username, role)` |
 | `SettingsPage` | Settings | `updatePermalink(structure)`, `resetToDefault()` |
 
-## Ví dụ chi tiết: LoginPage
+## Detailed Example: `LoginPage`
 ```ts
 // pages/login.page.ts
 import { BasePage } from './base.page';
@@ -63,10 +63,10 @@ export class LoginPage extends BasePage {
 }
 ```
 
-## Ví dụ dùng trong test
+## Example Usage in a Test
 ```ts
 // tests/e2e/auth/login.spec.ts
-test('login thành công với tài khoản hợp lệ', async ({ page }) => {
+test('logs in successfully with valid credentials', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
 

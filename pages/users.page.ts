@@ -57,7 +57,7 @@ export class UsersPage extends BasePage {
     await this.addUserSubmitButton().click();
   }
 
-  // reassignTo có 2 nhánh: gán lại nội dung cho user khác, hoặc bỏ trống để xoá luôn nội dung
+  // reassignTo supports two paths: reassign content to another user or leave it empty to delete the content.
   async deleteUser(username: string, reassignTo?: string): Promise<void> {
     await this.userRow(username).hover();
     await this.deleteLink(username).click();
