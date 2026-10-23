@@ -58,6 +58,20 @@ test.describe('Users', () => {
     await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
   });
 
+  test('từ chối tạo user với email đã được sử dụng', async ({ authenticatedPage, testUser }) => {
+    const usersPage = new UsersPage(authenticatedPage);
+
+    await usersPage.goto();
+    await usersPage.attemptCreateUser({
+      username: randomUsername(),
+      email: testUser.email,
+      password: randomPassword(),
+      role: 'Subscriber',
+    });
+
+    await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
+  });
+
   test('xoá user đã seed qua API và gán nội dung cho admin', async ({ authenticatedPage, testUser }) => {
     const usersPage = new UsersPage(authenticatedPage);
 

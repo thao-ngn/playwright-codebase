@@ -25,6 +25,15 @@ test.describe('Settings', () => {
 
     await expect(authenticatedPage.getByText('Permalink structure updated.')).toBeVisible();
   });
+
+  test('loại bỏ ký tự không hợp lệ khỏi custom permalink structure', async ({ authenticatedPage }) => {
+    const settingsPage = new SettingsPage(authenticatedPage);
+
+    await settingsPage.gotoPermalinks();
+    await settingsPage.updatePermalink('/%postname%!/');
+
+    await expect(settingsPage.customStructureInputLocator()).toHaveValue('/%postname%/');
+  });
 });
 
 test.describe('Settings access control', () => {

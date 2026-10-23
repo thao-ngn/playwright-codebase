@@ -5,6 +5,22 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { MediaPage } from '@pages/media.page';
 
 test.describe('Media Library', () => {
+  test('từ chối upload tệp có định dạng không được hỗ trợ', async ({ authenticatedPage }) => {
+    const mediaPage = new MediaPage(authenticatedPage);
+    const filePath = path.join(os.tmpdir(), `unsupported-${Date.now()}.exe`);
+
+    fs.writeFileSync(filePath, 'not an image');
+
+    try {
+      await mediaPage.goto();
+      await mediaPage.uploadFile(filePath);
+
+      await expect(mediaPage.uploadErrorNoticeLocator()).toBeVisible();
+    } finally {
+      fs.rmSync(filePath, { force: true });
+    }
+  });
+
   test('upload file và chỉnh sửa alt text', async ({ authenticatedPage }) => {
     const mediaPage = new MediaPage(authenticatedPage);
     const fileName = `sample-${Date.now()}.png`;
@@ -27,5 +43,15 @@ test.describe('Media Library', () => {
 
     await mediaPage.goto();
     await mediaPage.deleteFile(fileName);
+  });
+});
+
+test.describe('Media Library access control', () => {
+  test('chuyển người dùng chưa đăng nhập về login khi mở Media Library', async ({ page }) => {
+    const mediaPage = new MediaPage(page);
+
+    await mediaPage.goto();
+
+    await expect(page).toHaveURL(/wp-login\.php/);
   });
 });

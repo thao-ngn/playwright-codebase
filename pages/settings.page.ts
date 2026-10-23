@@ -6,6 +6,10 @@ export class SettingsPage extends BasePage {
   private customStructureInput = () => this.page.getByLabel('Custom Structure');
   private saveButton = () => this.page.getByRole('button', { name: 'Save Changes' });
 
+  customStructureInputLocator() {
+    return this.customStructureInput();
+  }
+
   async gotoPermalinks(): Promise<void> {
     await super.goto('/wp-admin/options-permalink.php');
   }

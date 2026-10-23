@@ -8,6 +8,7 @@ export class MediaPage extends BasePage {
   private deleteLink = (fileName: string) => this.mediaItem(fileName).getByRole('link', { name: 'Delete Permanently' });
   private altTextInput = () => this.page.getByLabel('Alternative Text');
   private updateButton = () => this.page.getByRole('button', { name: 'Update' });
+  private uploadErrorNotice = () => this.page.locator('.upload-errors');
 
   async goto(): Promise<void> {
     await super.goto('/wp-admin/upload.php');
@@ -17,6 +18,10 @@ export class MediaPage extends BasePage {
     // Input file bị ẩn nên phải dùng setInputFiles thay vì click + chọn file qua dialog OS
     await this.fileInput().setInputFiles(filePath);
     await this.uploadingSpinner().waitFor({ state: 'detached' });
+  }
+
+  uploadErrorNoticeLocator() {
+    return this.uploadErrorNotice();
   }
 
   async deleteFile(fileName: string): Promise<void> {
