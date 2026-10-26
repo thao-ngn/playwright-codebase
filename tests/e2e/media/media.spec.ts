@@ -21,6 +21,22 @@ test.describe('Media Library', () => {
     }
   });
 
+  test('rejects uploading an empty file', async ({ authenticatedPage }) => {
+    const mediaPage = new MediaPage(authenticatedPage);
+    const filePath = path.join(os.tmpdir(), `empty-${Date.now()}.png`);
+
+    fs.writeFileSync(filePath, '');
+
+    try {
+      await mediaPage.goto();
+      await mediaPage.uploadFile(filePath);
+
+      await expect(mediaPage.uploadErrorNoticeLocator()).toBeVisible();
+    } finally {
+      fs.rmSync(filePath, { force: true });
+    }
+  });
+
   test('uploads a file and edits its alt text', async ({ authenticatedPage }) => {
     const mediaPage = new MediaPage(authenticatedPage);
     const fileName = `sample-${Date.now()}.png`;

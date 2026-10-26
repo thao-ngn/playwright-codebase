@@ -32,4 +32,15 @@ test.describe('Dashboard', () => {
     await expect(dashboardPage.quickDraftContentInput()).toBeVisible();
     await expect(dashboardPage.quickDraftSaveButton()).toBeEnabled();
   });
+
+  test('keeps Quick Draft usable when the form is empty', async ({ authenticatedPage }) => {
+    const dashboardPage = new DashboardPage(authenticatedPage);
+
+    await dashboardPage.goto();
+    await dashboardPage.waitForWidgetsLoaded();
+
+    await expect(dashboardPage.quickDraftTitleInput()).toHaveValue('');
+    await expect(dashboardPage.quickDraftContentInput()).toHaveValue('');
+    await expect(dashboardPage.quickDraftSaveButton()).toBeVisible();
+  });
 });
