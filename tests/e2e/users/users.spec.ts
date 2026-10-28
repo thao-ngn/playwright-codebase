@@ -28,6 +28,16 @@ test.describe('Users', () => {
     await usersPage.deleteUser(username);
   });
 
+  test('deletes an API-seeded user and reassigns their content to the admin', async ({ authenticatedPage, testUser }) => {
+    const usersPage = new UsersPage(authenticatedPage);
+
+    await usersPage.goto();
+    await usersPage.deleteUser(testUser.username, requiredEnv('ADMIN_USER'));
+    await expect(authenticatedPage.getByText(testUser.username)).not.toBeVisible();
+  });
+});
+
+test.describe('Users abnormal cases', () => {
   test('rejects creating a user with an invalid email address', async ({ authenticatedPage }) => {
     const usersPage = new UsersPage(authenticatedPage);
 
@@ -70,13 +80,5 @@ test.describe('Users', () => {
     });
 
     await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
-  });
-
-  test('deletes an API-seeded user and reassigns their content to the admin', async ({ authenticatedPage, testUser }) => {
-    const usersPage = new UsersPage(authenticatedPage);
-
-    await usersPage.goto();
-    await usersPage.deleteUser(testUser.username, requiredEnv('ADMIN_USER'));
-    await expect(authenticatedPage.getByText(testUser.username)).not.toBeVisible();
   });
 });

@@ -14,7 +14,7 @@ export class SettingsPage extends BasePage {
     await super.goto('/wp-admin/options-permalink.php');
   }
 
-  async updatePermalink(structure: string): Promise<void> {
+  async attemptUpdatePermalink(structure: string): Promise<void> {
     const option = this.permalinkOption(structure);
     if (await option.count()) {
       await option.check();
@@ -23,6 +23,10 @@ export class SettingsPage extends BasePage {
       await this.customStructureInput().fill(structure);
     }
     await this.saveButton().click();
+  }
+
+  async updatePermalink(structure: string): Promise<void> {
+    await this.attemptUpdatePermalink(structure);
     await expect(this.page.getByText('Permalink structure updated.')).toBeVisible();
   }
 

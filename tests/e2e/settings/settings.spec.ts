@@ -25,8 +25,10 @@ test.describe('Settings', () => {
 
     await expect(authenticatedPage.getByText('Permalink structure updated.')).toBeVisible();
   });
+});
 
-  test('removes invalid characters from the custom permalink structure', async ({ authenticatedPage }) => {
+test.describe('Settings abnormal cases', () => {
+  test('removes invalid characters from a custom permalink structure', async ({ authenticatedPage }) => {
     const settingsPage = new SettingsPage(authenticatedPage);
 
     await settingsPage.gotoPermalinks();
@@ -34,9 +36,7 @@ test.describe('Settings', () => {
 
     await expect(settingsPage.customStructureInputLocator()).toHaveValue('/%postname%/');
   });
-});
 
-test.describe('Settings access control', () => {
   test('redirects unauthenticated users to login when opening Permalinks', async ({ page }) => {
     const settingsPage = new SettingsPage(page);
 
