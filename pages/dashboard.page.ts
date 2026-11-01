@@ -6,9 +6,16 @@ export class DashboardPage extends BasePage {
   private activityWidget = () => this.page.locator('#dashboard_activity');
   private quickDraftWidget = () => this.page.locator('#dashboard_quick_press');
   private eventsWidget = () => this.page.locator('#dashboard_primary');
+  private accountMenu = () => this.page.getByRole('link', { name: /^Howdy,/ });
+  private logoutLink = () => this.page.getByRole('link', { name: 'Log Out' });
 
   async goto(): Promise<void> {
     await super.goto('/wp-admin/');
+  }
+
+  async logout(): Promise<void> {
+    await this.accountMenu().hover();
+    await this.logoutLink().click();
   }
 
   quickDraftTitleInput() {
