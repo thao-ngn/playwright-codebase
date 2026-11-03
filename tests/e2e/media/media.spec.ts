@@ -5,6 +5,22 @@ import { test, expect } from '@fixtures/auth.fixture';
 import { MediaPage } from '@pages/media.page';
 
 test.describe('Media Library', () => {
+  test('rejects a file with an image extension but invalid image content', async ({ authenticatedPage }) => {
+    const mediaPage = new MediaPage(authenticatedPage);
+    const filePath = path.join(os.tmpdir(), `invalid-image-${Date.now()}.png`);
+
+    fs.writeFileSync(filePath, 'not a valid image');
+
+    try {
+      await mediaPage.goto();
+      await mediaPage.uploadFile(filePath);
+
+      await expect(mediaPage.uploadErrorNoticeLocator()).toBeVisible();
+    } finally {
+      fs.rmSync(filePath, { force: true });
+    }
+  });
+
   test('rejects uploading a file with an unsupported format', async ({ authenticatedPage }) => {
     const mediaPage = new MediaPage(authenticatedPage);
     const filePath = path.join(os.tmpdir(), `unsupported-${Date.now()}.exe`);

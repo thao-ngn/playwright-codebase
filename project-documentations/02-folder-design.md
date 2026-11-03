@@ -39,7 +39,8 @@ playwright-codebase/
 │   ├── e2e/
 │   │   ├── auth/
 │   │   │   ├── login-form.spec.ts
-│   │   │   └── login.spec.ts
+│   │   │   ├── login.spec.ts
+│   │   │   └── logout.spec.ts
 │   │   ├── dashboard/
 │   │   │   └── dashboard.spec.ts
 │   │   ├── media/

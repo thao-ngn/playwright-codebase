@@ -30,6 +30,10 @@ export class DashboardPage extends BasePage {
     return this.quickDraftWidget().getByRole('button', { name: 'Save Draft' });
   }
 
+  async saveQuickDraft(): Promise<void> {
+    await this.quickDraftSaveButton().click();
+  }
+
   // Widgets load asynchronously (AJAX), so wait for each widget instead of relying on a general page load state.
   async waitForWidgetsLoaded(): Promise<void> {
     await expect(this.atAGlanceWidget()).toBeVisible();
