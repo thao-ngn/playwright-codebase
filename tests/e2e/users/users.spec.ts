@@ -81,4 +81,19 @@ test.describe('Users abnormal cases', () => {
 
     await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
   });
+
+  test('rejects creating a user without a username', async ({ authenticatedPage }) => {
+    const usersPage = new UsersPage(authenticatedPage);
+
+    await usersPage.goto();
+    await usersPage.attemptCreateUser({
+      username: '',
+      email: randomEmail(),
+      password: randomPassword(),
+      role: 'Subscriber',
+    });
+
+    await expect(usersPage.creationErrorNoticeLocator()).toBeVisible();
+    await expect(authenticatedPage).toHaveURL(/user-new\.php/);
+  });
 });
