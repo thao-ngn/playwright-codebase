@@ -8,6 +8,7 @@ export class PostsPage extends BasePage {
   private publishButton = () => this.page.getByRole('button', { name: 'Publish', exact: true });
   private searchInput = () => this.page.getByPlaceholder('Search posts');
   private searchSubmitButton = () => this.page.getByRole('button', { name: 'Search Posts' });
+  private noPostsFoundMessage = () => this.page.getByText('No posts found.', { exact: true });
   private postRow = (title: string) => this.page.getByRole('row', { name: title });
   private trashLink = (title: string) => this.postRow(title).getByRole('link', { name: 'Trash' });
   private rowCheckbox = (title: string) => this.postRow(title).getByRole('checkbox');
@@ -34,6 +35,10 @@ export class PostsPage extends BasePage {
   async searchPost(keyword: string): Promise<void> {
     await this.searchInput().fill(keyword);
     await this.searchSubmitButton().click();
+  }
+
+  noPostsFoundMessageLocator() {
+    return this.noPostsFoundMessage();
   }
 
   async deletePost(title: string): Promise<void> {

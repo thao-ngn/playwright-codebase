@@ -1,6 +1,7 @@
 import { test, expect } from '@fixtures/auth.fixture';
+import { test as unauthenticatedTest } from '@playwright/test';
 import { PostsPage } from '@pages/posts.page';
-import { randomPostTitle } from '@utils/data-generator';
+import { randomPostTitle, randomUsername } from '@utils/data-generator';
 
 test.describe('Posts', () => {
   test('creates, searches for, and deletes a post', async ({ authenticatedPage }) => {
@@ -33,5 +34,25 @@ test.describe('Posts', () => {
     for (const title of titles) {
       await expect(authenticatedPage.getByText(title)).not.toBeVisible();
     }
+  });
+});
+
+test.describe('Posts abnormal cases', () => {
+  test('shows an empty state when a search has no matching posts', async ({ authenticatedPage }) => {
+    const postsPage = new PostsPage(authenticatedPage);
+    const missingTitle = `${randomPostTitle()} ${randomUsername()}`;
+
+    await postsPage.goto();
+    await postsPage.searchPost(missingTitle);
+
+    await expect(postsPage.noPostsFoundMessageLocator()).toBeVisible();
+  });
+
+  unauthenticatedTest('redirects unauthenticated users to login when opening the Posts list', async ({ page }) => {
+    const postsPage = new PostsPage(page);
+
+    await postsPage.goto();
+
+    await expect(page).toHaveURL(/wp-login\.php/);
   });
 });
