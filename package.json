@@ -1,9 +1,13 @@
 {
   "name": "playwright-codebase",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
+  "description": "Playwright end-to-end tests for WP-Admin",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

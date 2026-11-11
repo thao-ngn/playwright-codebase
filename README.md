@@ -20,7 +20,7 @@ The analysis and design decisions made before implementation are documented in `
 ```
 playwright-codebase/
 ├── project-documentations/   # Design documentation (see the table above)
-├── tests/                    # Test spec (e2e, api)
+├── tests/                    # End-to-end test specs
 ├── report/                   # HTML report generated after tests run
 ├── api/                      # REST API helpers for seeding and cleaning up data
 ├── pages/                    # Page Object Model classes
@@ -36,16 +36,16 @@ playwright-codebase/
 
 ## Environment Setup
 
-Create a `.env` file in the project root from `environment/.env.example`, then provide the test URL and account credentials. Do not commit `.env` or credentials:
+Create a `.env` file in the project root from `.env.example`, then provide the test URL and account credentials. Do not commit `.env` or credentials:
 
 ```powershell
-Copy-Item environment\.env.example .env
+Copy-Item .env.example .env
 ```
 
-Example API tests are in `tests/api/` and can be run separately with `npx playwright test tests/api`.
+The default `BASE_URL` points to the practice WP-Admin site. Set `ADMIN_USER` and `ADMIN_PASS` to an account on that site before running tests that require authentication.
 
 ## Requirements
-- Node.js >= 18
+- Node.js >= 20
 - npm
 
 ## Installation
@@ -61,16 +61,19 @@ npx playwright install
 
 ```bash
 # Run all tests
-npx playwright test
+npm test
 
 # Run a specific test file
-npx playwright test tests/e2e/auth/login.spec.ts
+npm test -- tests/e2e/auth/login.spec.ts
 
 # Run in UI mode (interactive debugging)
-npx playwright test --ui
+npm run test:ui
+
+# Run with a visible browser
+npm run test:headed
 
 # Open the HTML report after the test run
-npx playwright show-report report
+npm run test:report
 ```
 
 ## CI/CD
