@@ -37,6 +37,16 @@ test.describe('Settings abnormal cases', () => {
     await expect(settingsPage.customStructureInputLocator()).toHaveValue('/%postname%/');
   });
 
+  test('preserves an empty custom permalink structure when the value is cleared', async ({ authenticatedPage }) => {
+    const settingsPage = new SettingsPage(authenticatedPage);
+
+    await settingsPage.gotoPermalinks();
+    await settingsPage.attemptUpdatePermalink('');
+
+    await expect(settingsPage.customStructureInputLocator()).toHaveValue('');
+    await expect(authenticatedPage).toHaveURL(/options-permalink\.php/);
+  });
+
   test('redirects unauthenticated users to login when opening Permalinks', async ({ page }) => {
     const settingsPage = new SettingsPage(page);
 
